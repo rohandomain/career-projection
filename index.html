@@ -1,1 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Career Projection</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --pink: #ffc7e3;
+    --blue: #b8e3ff;
+    --purple: #d5ccff;
+    --mint: #c9ffe4;
+    --text: #2a2a2a;
+    --bg: #fafafa;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Poppins", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .wrapper {
+    max-width: 780px;
+    width: 100%;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 600;
+    background: linear-gradient(90deg, var(--pink), var(--purple));
+    -webkit-background-clip: text;
+    color: transparent;
+    margin-bottom: 10px;
+  }
+
+  p {
+    font-size: 16px;
+    opacity: 0.8;
+  }
+
+  /* BUBBLE CARD */
+  .card {
+    background: white;
+    padding: 22px;
+    margin-top: 18px;
+    border-radius: 26px;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
+    border: 3px solid rgba(0,0,0,0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  }
+
+  /* TAGS */
+  .tag {
+    display: inline-block;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 14px;
+    margin-right: 8px;
+    font-weight: 500;
+  }
+
+  .pink { background: var(--pink); }
+  .blue { background: var(--blue); }
+  .mint { background: var(--mint); }
+  .purple { background: var(--purple); }
+
+  /* BUTTON */
+  button {
+    padding: 12px 22px;
+    border: none;
+    border-radius: 20px;
+    background: linear-gradient(90deg, var(--blue), var(--mint));
+    color: #193344;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 14px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    transition: transform 0.2s ease;
+  }
+
+  button:hover {
+    transform: translateY(-3px);
+  }
+
+  /* INPUT AREA */
+  .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  input {
+    padding: 12px 16px;
+    border-radius: 20px;
+    border: 2px solid rgba(0,0,0,0.08);
+    font-size: 15px;
+  }
+
+  /* RESULT BUBBLE */
+  .result {
+    margin-top: 18px;
+    padding: 18px;
+    border-radius: 20px;
+    background: var(--mint);
+    font-weight: 500;
+    display: none;
+  }
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <header>
+    <h1>Career Projection</h1>
+    <p>Your friendly, bubbly career forecaster ✨</p>
+  </header>
+
+  <div class="card">
+    <div class="tag pink">Fun</div>
+    <div class="tag purple">Simple</div>
+    <div class="tag blue">Helpful</div>
+
+    <h2 style="margin-top:20px;">Enter your information</h2>
+
+    <div class="input-area">
+      <input id="career" type="text" placeholder="Career (ex: Software Engineer)">
+      <input id="years" type="number" placeholder="Years of experience">
+      <input id="location" type="text" placeholder="Location (ex: New York)">
+    </div>
+
+    <button onclick="project()">Show Projection 🎈</button>
+
+    <div class="result" id="output"></div>
+  </div>
+
+</div>
+
+<script>
+function project() {
+  const career = document.getElementById("career").value.trim();
+  const years = document.getElementById("years").value.trim();
+  const location = document.getElementById("location").value.trim();
+  const out = document.getElementById("output");
+
+  if (!career || !years || !location) {
+    out.style.display = "block";
+    out.innerHTML = "Please fill out all fields 💛";
+    return;
+  }
+
+  out.style.display = "block";
+  out.innerHTML = `
+    🎉 <strong>${career}</strong> in <strong>${location}</strong><br><br>
+    With <strong>${years} years</strong> of experience, your projected path looks bright 💡<br><br>
+    ⭐ Salary growth expected<br>
+    ⭐ Strong job outlook<br>
+    ⭐ High opportunity for skill development
+  `;
+}
+</script>
+
+</body>
+</html>
 
