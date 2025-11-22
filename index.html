@@ -1,125 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Career Projection</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
+  /* ------------------ COLORS ------------------ */
   :root {
-    --pink: #ffc7e3;
-    --blue: #b8e3ff;
-    --purple: #d5ccff;
-    --mint: #c9ffe4;
-    --text: #2a2a2a;
-    --bg: #fafafa;
+    --pink: #ffb8da;
+    --lavender: #daccff;
+    --mint: #c9ffe9;
+    --sky: #c8e7ff;
+    --bg: #faf9ff;
+    --text: #333;
   }
 
+  /* ------------------ GLOBAL ------------------ */
   body {
     margin: 0;
+    padding: 32px;
     font-family: "Poppins", sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    padding: 20px;
+    background: linear-gradient(180deg, var(--lavender), var(--mint));
+    min-height: 100vh;
     display: flex;
     justify-content: center;
   }
 
-  .wrapper {
-    max-width: 780px;
+  .container {
     width: 100%;
-  }
-
-  header {
-    text-align: center;
-    margin-bottom: 30px;
+    max-width: 780px;
   }
 
   h1 {
-    font-size: 32px;
+    text-align: center;
+    font-size: 2.4rem;
     font-weight: 600;
-    background: linear-gradient(90deg, var(--pink), var(--purple));
+    background: linear-gradient(90deg, var(--pink), var(--sky));
     -webkit-background-clip: text;
     color: transparent;
     margin-bottom: 10px;
   }
 
-  p {
-    font-size: 16px;
-    opacity: 0.8;
+  p.subtitle {
+    text-align: center;
+    color: #555;
+    margin: 0;
+    font-size: 1.1rem;
   }
 
-  /* BUBBLE CARD */
+  /* ------------------ CARD ------------------ */
   .card {
     background: white;
-    padding: 22px;
-    margin-top: 18px;
-    border-radius: 26px;
-    box-shadow: 0 8px 25px rgba(0,0,0,0.05);
-    border: 3px solid rgba(0,0,0,0.03);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin-top: 30px;
+    padding: 26px;
+    border-radius: 28px;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+    border: 2px solid rgba(0,0,0,0.05);
+    animation: floatIn 0.6s ease;
   }
 
-  .card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.08);
+  @keyframes floatIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
   }
 
   /* TAGS */
+  .tags {
+    margin-bottom: 14px;
+  }
+
   .tag {
     display: inline-block;
-    padding: 6px 15px;
-    border-radius: 20px;
+    padding: 6px 14px;
     font-size: 14px;
+    border-radius: 20px;
     margin-right: 8px;
     font-weight: 500;
   }
 
   .pink { background: var(--pink); }
-  .blue { background: var(--blue); }
+  .lav { background: var(--lavender); }
   .mint { background: var(--mint); }
-  .purple { background: var(--purple); }
+  .sky { background: var(--sky); }
+
+  /* INPUT AREA */
+  .input-area {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 16px;
+  }
+
+  input {
+    padding: 14px 16px;
+    border-radius: 20px;
+    border: 2px solid rgba(0,0,0,0.08);
+    font-size: 16px;
+    outline: none;
+    background: #fdfcff;
+    transition: 0.2s;
+  }
+
+  input:focus {
+    border-color: var(--sky);
+    background: white;
+  }
 
   /* BUTTON */
   button {
-    padding: 12px 22px;
+    margin-top: 18px;
+    padding: 14px 22px;
+    font-size: 1rem;
+    border-radius: 30px;
     border: none;
-    border-radius: 20px;
-    background: linear-gradient(90deg, var(--blue), var(--mint));
-    color: #193344;
-    font-size: 15px;
-    font-weight: 600;
     cursor: pointer;
-    margin-top: 14px;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
-    transition: transform 0.2s ease;
+    background: linear-gradient(90deg, var(--sky), var(--mint));
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    font-weight: 600;
+    color: #1c3b4f;
+    transition: 0.2s;
   }
 
   button:hover {
     transform: translateY(-3px);
   }
 
-  /* INPUT AREA */
-  .input-area {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  input {
-    padding: 12px 16px;
-    border-radius: 20px;
-    border: 2px solid rgba(0,0,0,0.08);
-    font-size: 15px;
-  }
-
-  /* RESULT BUBBLE */
+  /* RESULT */
   .result {
-    margin-top: 18px;
+    margin-top: 20px;
     padding: 18px;
-    border-radius: 20px;
+    border-radius: 24px;
     background: var(--mint);
     font-weight: 500;
     display: none;
@@ -128,29 +141,33 @@
 </head>
 
 <body>
-<div class="wrapper">
 
-  <header>
-    <h1>Career Projection</h1>
-    <p>Your friendly, bubbly career forecaster ✨</p>
-  </header>
+<div class="container">
+
+  <h1>Career Projection</h1>
+  <p class="subtitle">A soft, friendly tool that makes future careers easy to explore ✨</p>
 
   <div class="card">
-    <div class="tag pink">Fun</div>
-    <div class="tag purple">Simple</div>
-    <div class="tag blue">Helpful</div>
 
-    <h2 style="margin-top:20px;">Enter your information</h2>
+    <div class="tags">
+      <span class="tag pink">Bubbly</span>
+      <span class="tag lav">Simple</span>
+      <span class="tag sky">Clean</span>
+      <span class="tag mint">Friendly</span>
+    </div>
+
+    <h2 style="margin-top:0;">Tell us about you</h2>
 
     <div class="input-area">
-      <input id="career" type="text" placeholder="Career (ex: Software Engineer)">
+      <input id="career" type="text" placeholder="Career (e.g., Software Engineer)">
       <input id="years" type="number" placeholder="Years of experience">
-      <input id="location" type="text" placeholder="Location (ex: New York)">
+      <input id="location" type="text" placeholder="Location (e.g., Boston)">
     </div>
 
     <button onclick="project()">Show Projection 🎈</button>
 
     <div class="result" id="output"></div>
+
   </div>
 
 </div>
@@ -164,21 +181,23 @@ function project() {
 
   if (!career || !years || !location) {
     out.style.display = "block";
+    out.style.background = "var(--pink)";
     out.innerHTML = "Please fill out all fields 💛";
     return;
   }
 
   out.style.display = "block";
+  out.style.background = "var(--mint)";
   out.innerHTML = `
     🎉 <strong>${career}</strong> in <strong>${location}</strong><br><br>
-    With <strong>${years} years</strong> of experience, your projected path looks bright 💡<br><br>
-    ⭐ Salary growth expected<br>
+    With <strong>${years} years</strong> of experience, your projection looks great!<br><br>
     ⭐ Strong job outlook<br>
-    ⭐ High opportunity for skill development
+    ⭐ Growing demand in your field<br>
+    ⭐ Competitive salary progression<br>
+    ⭐ Great opportunities for skill growth
   `;
 }
 </script>
 
 </body>
 </html>
-
