@@ -1,51 +1,30 @@
-let chart;
+document.getElementById("projectBtn").addEventListener("click", project);
 
-// CSV Parsing + Chart Creation
-document.getElementById("fileInput").addEventListener("change", function (event) {
-    const file = event.target.files[0];
-    const reader = new FileReader();
+function project() {
+    const career = document.getElementById('career').value.trim();
+    const years = parseInt(document.getElementById('years').value.trim());
+    const location = document.getElementById('location').value.trim();
+    const output = document.getElementById('output');
 
-    reader.onload = function (e) {
-        const text = e.target.result;
-        const rows = text.split("\n").map(row => row.split(","));
+    if(!career || !years || !location) {
+        output.innerHTML = "Please fill in all fields.";
+        return;
+    }
 
-        // First row = labels
-        const labels = rows.slice(1).map(row => row[0]);
+    // Simple dynamic salary projection
+    let baseSalary = 50000;
+    if(career.toLowerCase().includes('engineer')) baseSalary = 90000 + years*2000;
+    else if(career.toLowerCase().includes('designer')) baseSalary = 60000 + years*1500;
+    else if(career.toLowerCase().includes('manager')) baseSalary = 80000 + years*2500;
+    else baseSalary = 55000 + years*1000;
 
-        // Second column = values
-        const values = rows.slice(1).map(row => parseFloat(row[1]));
-
-        // Create Chart
-        createChart(labels, values);
-    };
-
-    reader.readAsText(file);
-});
-
-function createChart(labels, values) {
-    const ctx = document.getElementById("chart");
-
-    if (chart) chart.destroy(); // reset chart if new one uploaded
-
-    chart = new Chart(ctx, {
-        type: "line",
-        data: {
-            labels: labels,
-            datasets: [{
-                label: "Projections",
-                data: values,
-                borderWidth: 3,
-                tension: 0.3
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: { beginAtZero: false }
-            }
-        }
-    });
+    output.innerHTML = `
+        <strong>${career}</strong> in <strong>${location}</strong><br>
+        With <strong>${years} years</strong> of experience:<br>
+        <ul>
+            <li>Estimated Salary: $${baseSalary.toLocaleString()}</li>
+            <li>Job Outlook: Strong</li>
+            <li>Opportunities for Skill Development: High</li>
+        </ul>
+    `;
 }
