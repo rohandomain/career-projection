@@ -1,203 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Career Projection</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<!-- Google Font -->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-  /* ------------------ COLORS ------------------ */
+  /* COLORS */
   :root {
-    --pink: #ffb8da;
-    --lavender: #daccff;
-    --mint: #c9ffe9;
-    --sky: #c8e7ff;
-    --bg: #faf9ff;
-    --text: #333;
+    --bg: #f9fafb;
+    --card-bg: #ffffff;
+    --text: #1f2937;
+    --muted: #6b7280;
+    --primary: #2563eb;
+    --primary-hover: #1d4ed8;
+    --border: #e5e7eb;
+    --radius: 12px;
+    --shadow: 0 4px 20px rgba(0,0,0,0.05);
   }
 
-  /* ------------------ GLOBAL ------------------ */
+  /* BASE STYLES */
   body {
     margin: 0;
-    padding: 32px;
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(180deg, var(--lavender), var(--mint));
-    min-height: 100vh;
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
     display: flex;
     justify-content: center;
+    padding: 40px 20px;
   }
 
   .container {
+    max-width: 720px;
     width: 100%;
-    max-width: 780px;
   }
 
   h1 {
-    text-align: center;
-    font-size: 2.4rem;
     font-weight: 600;
-    background: linear-gradient(90deg, var(--pink), var(--sky));
-    -webkit-background-clip: text;
-    color: transparent;
-    margin-bottom: 10px;
+    font-size: 2rem;
+    margin-bottom: 8px;
   }
 
-  p.subtitle {
-    text-align: center;
-    color: #555;
-    margin: 0;
-    font-size: 1.1rem;
+  p.lead {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 24px;
   }
 
-  /* ------------------ CARD ------------------ */
+  /* CARD */
   .card {
-    background: white;
-    margin-top: 30px;
-    padding: 26px;
-    border-radius: 28px;
-    box-shadow: 0 12px 28px rgba(0,0,0,0.08);
-    border: 2px solid rgba(0,0,0,0.05);
-    animation: floatIn 0.6s ease;
+    background-color: var(--card-bg);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 24px;
+    border: 1px solid var(--border);
+    margin-bottom: 20px;
   }
 
-  @keyframes floatIn {
-    from { opacity: 0; transform: translateY(20px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-
-  /* TAGS */
-  .tags {
-    margin-bottom: 14px;
-  }
-
-  .tag {
-    display: inline-block;
-    padding: 6px 14px;
-    font-size: 14px;
-    border-radius: 20px;
-    margin-right: 8px;
-    font-weight: 500;
-  }
-
-  .pink { background: var(--pink); }
-  .lav { background: var(--lavender); }
-  .mint { background: var(--mint); }
-  .sky { background: var(--sky); }
-
-  /* INPUT AREA */
-  .input-area {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 16px;
-  }
-
+  /* FORM INPUTS */
   input {
-    padding: 14px 16px;
-    border-radius: 20px;
-    border: 2px solid rgba(0,0,0,0.08);
-    font-size: 16px;
+    width: 100%;
+    padding: 12px 14px;
+    margin-bottom: 12px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    font-size: 1rem;
     outline: none;
-    background: #fdfcff;
-    transition: 0.2s;
   }
 
   input:focus {
-    border-color: var(--sky);
-    background: white;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
   }
 
   /* BUTTON */
   button {
-    margin-top: 18px;
-    padding: 14px 22px;
-    font-size: 1rem;
-    border-radius: 30px;
+    padding: 12px 20px;
     border: none;
-    cursor: pointer;
-    background: linear-gradient(90deg, var(--sky), var(--mint));
-    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    border-radius: var(--radius);
+    background-color: var(--primary);
+    color: #ffffff;
     font-weight: 600;
-    color: #1c3b4f;
-    transition: 0.2s;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s ease;
   }
 
   button:hover {
-    transform: translateY(-3px);
+    background-color: var(--primary-hover);
   }
 
-  /* RESULT */
+  /* OUTPUT BOX */
   .result {
-    margin-top: 20px;
-    padding: 18px;
-    border-radius: 24px;
-    background: var(--mint);
-    font-weight: 500;
-    display: none;
+    margin-top: 16px;
+    padding: 16px;
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    background-color: #f3f4f6;
   }
 </style>
 </head>
 
 <body>
+  <div class="container">
+    <h1>Career Projection Tool</h1>
+    <p class="lead">Explore career paths, projected salaries, and growth opportunities in a clear, user-friendly interface.</p>
 
-<div class="container">
-
-  <h1>Career Projection</h1>
-  <p class="subtitle">A soft, friendly tool that makes future careers easy to explore ✨</p>
-
-  <div class="card">
-
-    <div class="tags">
-      <span class="tag pink">Bubbly</span>
-      <span class="tag lav">Simple</span>
-      <span class="tag sky">Clean</span>
-      <span class="tag mint">Friendly</span>
+    <div class="card">
+      <input type="text" id="career" placeholder="Career (e.g., Software Engineer)">
+      <input type="number" id="years" placeholder="Years of experience">
+      <input type="text" id="location" placeholder="Location (e.g., New York)">
+      <button onclick="project()">Show Projection</button>
+      <div class="result" id="output"></div>
     </div>
-
-    <h2 style="margin-top:0;">Tell us about you</h2>
-
-    <div class="input-area">
-      <input id="career" type="text" placeholder="Career (e.g., Software Engineer)">
-      <input id="years" type="number" placeholder="Years of experience">
-      <input id="location" type="text" placeholder="Location (e.g., Boston)">
-    </div>
-
-    <button onclick="project()">Show Projection 🎈</button>
-
-    <div class="result" id="output"></div>
-
   </div>
-
-</div>
 
 <script>
 function project() {
-  const career = document.getElementById("career").value.trim();
-  const years = document.getElementById("years").value.trim();
-  const location = document.getElementById("location").value.trim();
-  const out = document.getElementById("output");
+  const career = document.getElementById('career').value.trim();
+  const years = document.getElementById('years').value.trim();
+  const location = document.getElementById('location').value.trim();
+  const output = document.getElementById('output');
 
-  if (!career || !years || !location) {
-    out.style.display = "block";
-    out.style.background = "var(--pink)";
-    out.innerHTML = "Please fill out all fields 💛";
+  if(!career || !years || !location) {
+    output.innerHTML = "Please fill in all fields.";
     return;
   }
 
-  out.style.display = "block";
-  out.style.background = "var(--mint)";
-  out.innerHTML = `
-    🎉 <strong>${career}</strong> in <strong>${location}</strong><br><br>
-    With <strong>${years} years</strong> of experience, your projection looks great!<br><br>
-    ⭐ Strong job outlook<br>
-    ⭐ Growing demand in your field<br>
-    ⭐ Competitive salary progression<br>
-    ⭐ Great opportunities for skill growth
+  output.innerHTML = `
+    <strong>${career}</strong> in <strong>${location}</strong><br>
+    With <strong>${years} years</strong> of experience, your projected career path looks strong.<br>
+    <ul>
+      <li>Salary growth: expected upward trend</li>
+      <li>Job outlook: strong</li>
+      <li>Opportunities for skill development: high</li>
+    </ul>
   `;
 }
 </script>
-
 </body>
 </html>
