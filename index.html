@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Career Projection</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Career & Economics Insights</title>
 
-<!-- Google Font -->
+<!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
 <style>
-  /* COLORS */
-  :root {
+:root {
     --bg: #f9fafb;
     --card-bg: #ffffff;
     --text: #1f2937;
@@ -20,10 +19,9 @@
     --border: #e5e7eb;
     --radius: 12px;
     --shadow: 0 4px 20px rgba(0,0,0,0.05);
-  }
+}
 
-  /* BASE STYLES */
-  body {
+body {
     margin: 0;
     font-family: 'Inter', sans-serif;
     background-color: var(--bg);
@@ -32,37 +30,37 @@
     display: flex;
     justify-content: center;
     padding: 40px 20px;
-  }
+}
 
-  .container {
-    max-width: 720px;
+.container {
+    max-width: 800px;
     width: 100%;
-  }
+}
 
-  h1 {
+h1 {
     font-weight: 600;
     font-size: 2rem;
     margin-bottom: 8px;
-  }
+}
 
-  p.lead {
+p.lead {
     color: var(--muted);
     font-size: 1rem;
     margin-bottom: 24px;
-  }
+}
 
-  /* CARD */
-  .card {
+/* Cards */
+.card {
     background-color: var(--card-bg);
     border-radius: var(--radius);
     box-shadow: var(--shadow);
     padding: 24px;
     border: 1px solid var(--border);
     margin-bottom: 20px;
-  }
+}
 
-  /* FORM INPUTS */
-  input {
+/* Input fields */
+input {
     width: 100%;
     padding: 12px 14px;
     margin-bottom: 12px;
@@ -70,77 +68,8 @@
     border: 1px solid var(--border);
     font-size: 1rem;
     outline: none;
-  }
-
-  input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
-  }
-
-  /* BUTTON */
-  button {
-    padding: 12px 20px;
-    border: none;
-    border-radius: var(--radius);
-    background-color: var(--primary);
-    color: #ffffff;
-    font-weight: 600;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.2s ease;
-  }
-
-  button:hover {
-    background-color: var(--primary-hover);
-  }
-
-  /* OUTPUT BOX */
-  .result {
-    margin-top: 16px;
-    padding: 16px;
-    border-radius: var(--radius);
-    border: 1px solid var(--border);
-    background-color: #f3f4f6;
-  }
-</style>
-</head>
-
-<body>
-  <div class="container">
-    <h1>Career Projection Tool</h1>
-    <p class="lead">Explore career paths, projected salaries, and growth opportunities in a clear, user-friendly interface.</p>
-
-    <div class="card">
-      <input type="text" id="career" placeholder="Career (e.g., Software Engineer)">
-      <input type="number" id="years" placeholder="Years of experience">
-      <input type="text" id="location" placeholder="Location (e.g., New York)">
-      <button onclick="project()">Show Projection</button>
-      <div class="result" id="output"></div>
-    </div>
-  </div>
-
-<script>
-function project() {
-  const career = document.getElementById('career').value.trim();
-  const years = document.getElementById('years').value.trim();
-  const location = document.getElementById('location').value.trim();
-  const output = document.getElementById('output');
-
-  if(!career || !years || !location) {
-    output.innerHTML = "Please fill in all fields.";
-    return;
-  }
-
-  output.innerHTML = `
-    <strong>${career}</strong> in <strong>${location}</strong><br>
-    With <strong>${years} years</strong> of experience, your projected career path looks strong.<br>
-    <ul>
-      <li>Salary growth: expected upward trend</li>
-      <li>Job outlook: strong</li>
-      <li>Opportunities for skill development: high</li>
-    </ul>
-  `;
 }
-</script>
-</body>
-</html>
+
+input:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 2p
