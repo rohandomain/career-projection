@@ -1,66 +1,137 @@
-/* Basic Reset */
-* {
+/* ------------------------------
+   GLOBAL STYLES
+--------------------------------*/
+body {
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
-}
-
-body {
-    font-family: Arial, sans-serif;
-    background: #f4f4f6;
+    font-family: 'Inter', sans-serif;
+    background-color: #fafafb;
     color: #333;
-    padding: 20px;
     line-height: 1.6;
 }
 
-/* Header */
+/* Smooth spacing */
+section {
+    padding: 40px 20px;
+    max-width: 900px;
+    margin: auto;
+}
+
+/* ------------------------------
+   HEADER / NAV
+--------------------------------*/
 header {
-    text-align: center;
-    margin-bottom: 40px;
+    background-color: #ffffff;
+    padding: 20px;
+    border-bottom: 1px solid #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
 }
 
 header h1 {
-    font-size: 2.8rem;
-    color: #222;
+    margin: 0;
+    font-size: 28px;
+    font-weight: 700;
+    color: #2d6cdf;
 }
 
-header p {
-    font-size: 1.2rem;
-    margin-top: 10px;
+nav a {
+    margin-right: 20px;
+    text-decoration: none;
+    color: #555;
+    font-size: 16px;
+}
+
+nav a:hover {
+    color: #2d6cdf;
+}
+
+/* ------------------------------
+   HERO SECTION
+--------------------------------*/
+.hero {
+    text-align: center;
+    padding: 70px 20px;
+}
+
+.hero h2 {
+    font-size: 34px;
+    margin-bottom: 10px;
+    color: #2d6cdf;
+}
+
+.hero p {
+    font-size: 18px;
     color: #555;
 }
 
-/* Upload Section */
-.upload-section {
+/* ------------------------------
+   CARDS
+--------------------------------*/
+.card {
     background: white;
     padding: 25px;
-    max-width: 600px;
-    margin: 0 auto 40px;
+    border-radius: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    margin-bottom: 25px;
+}
+
+.card h3 {
+    margin-top: 0;
+    color: #444;
+}
+
+/* ------------------------------
+   TABLES
+--------------------------------*/
+table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: white;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 20px 0;
+}
+
+th, td {
+    padding: 14px;
+    text-align: left;
+}
+
+th {
+    background-color: #f0f4ff;
+    color: #2d6cdf;
+}
+
+tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* ------------------------------
+   BUTTONS
+--------------------------------*/
+button {
+    border: none;
+    padding: 12px 20px;
+    font-size: 16px;
     border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    background-color: #2d6cdf;
+    color: white;
+    cursor: pointer;
 }
 
-.upload-section h2 {
-    margin-bottom: 15px;
+button:hover {
+    background-color: #1f4ea8;
 }
 
-.note {
-    margin-top: 10px;
-    font-size: 0.9rem;
-    color: #777;
-}
-
-/* Chart Section */
-.chart-section {
-    max-width: 800px;
-    background: white;
-    padding: 25px;
-    margin: 0 auto;
-    border-radius: 10px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
-}
-
-.chart-section h2 {
+/* ------------------------------
+   FOOTER
+--------------------------------*/
+footer {
     text-align: center;
-    margin-bottom: 20px;
+    padding: 20px;
+    color: #777;
+    font-size: 14px;
 }
+
