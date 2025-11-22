@@ -3,446 +3,315 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CareerPath — Student Career Projections</title>
+  <title>Startup Studio — Learn Entrepreneurship by Playing</title>
 
-  <!-- Chart.js v4 -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
   <style>
-    /* -- Basic layout & styling -- */
     :root{
-      --bg:#0f1724; --card:#0b1220; --muted:#9aa7b2; --accent:#7c9bff; --glass: rgba(255,255,255,0.04);
-      --maxw:1100px;
-      color: #e6eef6;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      --bg: #0f1724;         /* dark base */
+      --card:#0b1220;
+      --muted:#9aa4b2;
+      --accent:#6ee7b7;      /* mint-green */
+      --accent-2:#7dd3fc;    /* sky */
+      --glass: rgba(255,255,255,0.04);
+      --radius: 14px;
+      --max-width:1100px;
+      --shadow: 0 6px 24px rgba(2,6,23,0.6);
     }
-    html,body{height:100%;}
+
+    /* Light theme (toggle via .light on body) */
+    .light{
+      --bg:#f6f9fc;
+      --card:#ffffff;
+      --muted:#586273;
+      --accent:#06b6d4;
+      --accent-2:#34d399;
+      --glass: rgba(2,6,23,0.03);
+      --shadow: 0 8px 32px rgba(16,24,40,0.06);
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
-      background:linear-gradient(180deg,#071129 0%, #071526 60%);
+      font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      background: linear-gradient(180deg, rgba(10,14,22,1) 0%, rgba(12,18,28,1) 100%);
+      background-color:var(--bg);
+      color: #e6eef6;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
+      line-height:1.45;
+      padding:32px;
       display:flex;
       justify-content:center;
-      padding:28px;
+      align-items:flex-start;
     }
 
     .container{
       width:100%;
-      max-width:var(--maxw);
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border-radius:12px;
-      padding:22px;
-      box-shadow: 0 8px 30px rgba(2,6,23,0.6);
-      border:1px solid rgba(255,255,255,0.04);
-      display:grid;
-      grid-template-columns: 1fr 420px;
-      gap:20px;
+      max-width:var(--max-width);
     }
 
     header{
-      grid-column: 1 / -1;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      margin-bottom:6px;
-    }
-    h1{margin:0;font-size:20px;letter-spacing:-0.2px}
-    .subtitle{color:var(--muted); font-size:13px}
-
-    /* Left column (main) */
-    .main{
-      padding:12px;
-      border-radius:10px;
-      background:var(--card);
-      min-height:420px;
-    }
-
-    .controls{
       display:flex;
-      gap:8px;
-      margin-bottom:12px;
-      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      margin-bottom:28px;
     }
-    select, button{
-      background:var(--glass);
-      color:var(--muted);
-      border:1px solid rgba(255,255,255,0.04);
-      padding:8px 10px;
-      border-radius:8px;
-      outline:none;
-      font-size:14px;
-      color:var(--muted);
-    }
-    select:focus{box-shadow:0 0 0 3px rgba(124,155,255,0.08); color:var(--accent);}
 
-    .charts{
-      display:grid;
-      grid-template-columns:1fr;
-      gap:18px;
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
     }
+    .logo{
+      width:56px;height:56px;border-radius:12px;
+      background:linear-gradient(135deg,var(--accent),var(--accent-2));
+      display:flex;align-items:center;justify-content:center;
+      box-shadow: var(--shadow);
+      font-weight:700;color:#04203a;
+      font-size:20px;
+    }
+    h1{font-size:20px;margin:0}
+    p.lead{margin:0;color:var(--muted);font-size:14px}
+
+    .controls{display:flex;gap:10px;align-items:center}
+    .btn{
+      appearance:none;border:0;padding:10px 14px;border-radius:10px;
+      background:var(--glass);color:inherit;font-weight:600;
+      cursor:pointer;backdrop-filter: blur(6px);
+      transition:transform .18s ease, box-shadow .18s ease;
+    }
+    .btn:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+    .btn.primary{
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      color: #04203a;
+      box-shadow: 0 6px 18px rgba(93,212,199,0.12);
+    }
+
+    main{
+      display:grid;
+      grid-template-columns: 1fr 360px;
+      gap:22px;
+      align-items:start;
+    }
+
+    /* left column */
     .card{
-      background:linear-gradient(180deg, rgba(255,255,255,0.015), rgba(255,255,255,0.01));
-      border-radius:10px;
-      padding:14px;
+      background:var(--card);
+      padding:20px;border-radius:var(--radius);
+      box-shadow:var(--shadow);
       border:1px solid rgba(255,255,255,0.02);
     }
-    canvas{width:100% !important; height:320px !important;}
-
-    /* Right column (sidebar) */
-    .side{
-      padding:12px;
-      border-radius:10px;
-      background:var(--card);
-      min-height:420px;
-      display:flex;
-      flex-direction:column;
-      gap:12px;
+    .hero{
+      padding:28px;
+      display:flex;flex-direction:column;gap:16px;
     }
-    .meta-row{display:flex; justify-content:space-between; align-items:center;}
-    .muted{color:var(--muted); font-size:13px}
-    .skill-list{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
-    .skill{background:rgba(255,255,255,0.03); padding:6px 8px;border-radius:8px;font-size:13px;color:var(--muted);}
+    .hero h2{font-size:22px;margin:0}
+    .cta-row{display:flex;gap:12px;align-items:center}
+    .small{font-size:13px;color:var(--muted)}
 
-    .insight{font-size:13px;color:var(--muted);line-height:1.5}
-    .big {font-size:20px;color:#fff;font-weight:600}
-    footer{grid-column:1/-1; text-align:center; color:var(--muted); font-size:13px; margin-top:12px;}
+    /* features */
+    .features{
+      display:grid;
+      grid-template-columns: repeat(auto-fit,minmax(180px,1fr));
+      gap:12px;margin-top:16px;
+    }
+    .feature{
+      padding:12px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+      border:1px solid rgba(255,255,255,0.02);
+    }
+    .feature h3{margin:0;font-size:15px}
+    .feature p{margin:6px 0 0;color:var(--muted);font-size:13px}
 
-    @media(max-width:980px){
-      .container{grid-template-columns:1fr; padding:12px}
-      .side{order:2}
-      .main{order:1}
+    /* right column */
+    .side{
+      position:sticky; top:32px;
+    }
+    .progress{
+      display:flex;flex-direction:column;gap:12px;
+    }
+    .stat{
+      display:flex;justify-content:space-between;align-items:center;
+      padding:10px;border-radius:12px;background:var(--glass);
+    }
+    .progress-bar{
+      height:12px;background:rgba(255,255,255,0.06);border-radius:8px;overflow:hidden;width:100%;
+    }
+    .progress-fill{
+      height:100%;width:48%;border-radius:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      transition:width .6s cubic-bezier(.2,.9,.3,1)
+    }
+
+    footer{margin-top:18px;color:var(--muted);font-size:13px}
+
+    /* small screens */
+    @media (max-width:880px){
+      main{grid-template-columns:1fr; padding-bottom:80px}
+      .side{position:relative; top:auto}
     }
   </style>
 </head>
 <body>
-  <div class="container" id="app">
+  <div class="container" role="main">
     <header>
-      <div>
-        <h1>CareerPath — Student Career Projections</h1>
-        <div class="subtitle">Explore majors → career paths → salaries & projections</div>
+      <div class="brand" aria-label="Startup Studio">
+        <div class="logo" aria-hidden="true">SS</div>
+        <div>
+          <h1>Startup Studio</h1>
+          <p class="lead">A friendly game that teaches entrepreneurship basics.</p>
+        </div>
       </div>
-      <div class="muted">MVP · Data sourced from BLS & O*NET (sample)</div>
+
+      <div class="controls" role="navigation" aria-label="Top controls">
+        <button class="btn" id="helpBtn" title="Quick tour">Quick tour</button>
+        <button class="btn" id="themeToggle" title="Toggle theme">Toggle theme</button>
+        <button class="btn primary" id="startBtn">Start playing</button>
+      </div>
     </header>
 
-    <main class="main">
-      <div class="controls card">
-        <label class="muted" for="majorSelect">Major</label>
-        <div style="display:flex;gap:10px;margin-top:6px;">
-          <select id="majorSelect"></select>
-          <select id="careerSelect"></select>
-          <button id="compareBtn">Compare (2)</button>
-        </div>
-      </div>
+    <main>
+      <!-- left: hero + features -->
+      <section class="card hero" aria-labelledby="hero-title">
+        <h2 id="hero-title">Launch a company, learn by doing</h2>
+        <p class="small">Build a product, hire a team, raise funds, and compete on a leaderboard — all in short missions designed for busy learners.</p>
 
-      <div class="charts">
-        <div class="card">
-          <div class="meta-row">
-            <div><strong>Salary Overview</strong><div class="muted">Median & Starting salaries</div></div>
-            <div id="salarySummary" class="muted"></div>
-          </div>
-          <canvas id="salaryChart"></canvas>
+        <div class="cta-row">
+          <button class="btn primary" id="newGame">New mission</button>
+          <button class="btn" id="join">Join a study group</button>
+          <span class="small" style="margin-left:auto">Avg session: ~10–15 min</span>
         </div>
 
-        <div class="card">
-          <div class="meta-row">
-            <div><strong>Projected Job Growth</strong><div class="muted">Projected % growth over next 10 years</div></div>
-            <div id="growthSummary" class="muted"></div>
-          </div>
-          <canvas id="growthChart"></canvas>
+        <div class="features" aria-label="Key features">
+          <article class="feature">
+            <h3>Guided missions</h3>
+            <p>Short, scaffolded tasks that teach one idea at a time.</p>
+          </article>
+
+          <article class="feature">
+            <h3>Multiplayer study</h3>
+            <p>Invite friends, compare progress, and learn together.</p>
+          </article>
+
+          <article class="feature">
+            <h3>Real micro-lessons</h3>
+            <p>Brief lessons paired with in-game decisions and feedback.</p>
+          </article>
+
+          <article class="feature">
+            <h3>Visual analytics</h3>
+            <p>Track skills learned — revenue, hiring, marketing, and strategy.</p>
+          </article>
         </div>
-      </div>
+
+        <div style="margin-top:16px" aria-live="polite" id="msg"></div>
+      </section>
+
+      <!-- right: progress / quick stats -->
+      <aside class="side">
+        <div class="card progress" aria-labelledby="progress-title">
+          <h3 id="progress-title" style="margin:0 0 6px 0">Your progress</h3>
+
+          <div class="stat">
+            <div>
+              <div style="font-weight:700">Mission progress</div>
+              <div class="small">Completed 4 of 8 tasks</div>
+            </div>
+            <div style="width:120px">
+              <div class="progress-bar" aria-hidden="true">
+                <div class="progress-fill" id="progressFill" style="width:50%"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat" style="margin-top:8px">
+            <div>
+              <div style="font-weight:700">Reputation</div>
+              <div class="small">Rising entrepreneur</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-weight:700">1,240</div>
+              <div class="small">points</div>
+            </div>
+          </div>
+
+          <div style="margin-top:12px" class="small">
+            Tip: click "New mission" to try a 10-minute challenge that focuses on pricing strategy.
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:12px; text-align:center">
+          <div style="font-weight:700">Leaderboard</div>
+          <div class="small" style="margin-top:8px">You are <strong>#7</strong> this week — keep going!</div>
+          <div style="display:flex;gap:8px;justify-content:center;margin-top:12px">
+            <button class="btn" id="viewBoard">View</button>
+            <button class="btn primary" id="shareBtn">Share</button>
+          </div>
+        </div>
+
+        <footer style="margin-top:12px">Made with ♥ to teach entrepreneurship — version 0.9</footer>
+      </aside>
     </main>
-
-    <aside class="side">
-      <div class="card">
-        <div class="meta-row">
-          <div><strong id="careerTitle">Select a career</strong></div>
-          <div class="muted" id="reqEdu">Edu: —</div>
-        </div>
-        <div class="muted" id="careerDesc" style="margin-top:8px">Short description and what the role involves.</div>
-
-        <div style="margin-top:12px">
-          <div class="muted">Key skills</div>
-          <div class="skill-list" id="skills"></div>
-        </div>
-
-        <div style="margin-top:12px">
-          <div class="muted">Difficulty / Competition</div>
-          <div id="diff" class="big">—</div>
-        </div>
-      </div>
-
-      <div class="card">
-        <div><strong>How to prepare</strong></div>
-        <div class="insight" id="prepTips">Actionable steps for students: courses, internships, and skills.</div>
-      </div>
-
-      <div class="card">
-        <div class="muted">Data sources</div>
-        <div class="muted" style="margin-top:6px">BLS, O*NET, Glassdoor (sample). Replace sample dataset with real data when ready.</div>
-      </div>
-    </aside>
-
-    <footer>Built as an application-ready MVP — replace the sample dataset to expand.</footer>
   </div>
 
   <script>
-  /****************************************************************
-   * SAMPLE DATA - Replace this with your own real dataset.
-   * Each object: { major, career, start_salary, median_salary,
-   * growth_pct (projected), education, skills:[], difficulty, desc, prep }
-   ****************************************************************/
-  const DATA = [
-    // Economics
-    {
-      major: "Economics",
-      career: "Economic Analyst",
-      start_salary: 52000,
-      median_salary: 74000,
-      growth_pct: 7.5,
-      education: "Bachelor's (Master's common)",
-      skills: ["Excel", "Stata/R", "Data Analysis", "SQL", "Report Writing"],
-      difficulty: "Moderate",
-      desc: "Analyze economic data, produce reports, and forecast trends for firms or government.",
-      prep: "Take econometrics, statistics, learn R/Python, intern at research groups; build small projects analyzing public datasets."
-    },
-    {
-      major: "Economics",
-      career: "Policy Analyst",
-      start_salary: 48000,
-      median_salary: 68000,
-      growth_pct: 5.0,
-      education: "Bachelor's (Master's helpful)",
-      skills: ["Policy Research", "Critical Writing", "Data Viz", "Excel"],
-      difficulty: "Moderate",
-      desc: "Work with public policy teams to evaluate programs, model impacts, and recommend policy changes.",
-      prep: "Volunteer with local nonprofits, take public policy classes, write policy briefs; learn Tableau or Flourish for visualizations."
-    },
+    // Small interactive behaviors to make the page feel alive
+    const body = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const msg = document.getElementById('msg');
+    const progressFill = document.getElementById('progressFill');
 
-    // Computer Science
-    {
-      major: "Computer Science",
-      career: "Software Engineer",
-      start_salary: 85000,
-      median_salary: 110000,
-      growth_pct: 21.0,
-      education: "Bachelor's",
-      skills: ["Programming (Python/JS)", "Data Structures", "Algorithms", "Git"],
-      difficulty: "Hard",
-      desc: "Develop software systems, build features, and collaborate on engineering teams.",
-      prep: "Build projects, practice algorithms, intern at tech firms; have a GitHub portfolio and at least one deployed app."
-    },
-    {
-      major: "Computer Science",
-      career: "Data Engineer",
-      start_salary: 78000,
-      median_salary: 100000,
-      growth_pct: 15.0,
-      education: "Bachelor's",
-      skills: ["SQL", "ETL", "Cloud (AWS)", "Python", "Spark"],
-      difficulty: "Hard",
-      desc: "Design and maintain data pipelines and warehouses for analytics teams.",
-      prep: "Work on ETL projects, learn cloud basics; practice with datasets and build a pipeline end-to-end."
-    },
+    // Persist theme preference in localStorage
+    const saved = localStorage.getItem('ss_theme');
+    if (saved === 'light') body.classList.add('light');
 
-    // Business
-    {
-      major: "Business",
-      career: "Financial Analyst",
-      start_salary: 60000,
-      median_salary: 82000,
-      growth_pct: 6.0,
-      education: "Bachelor's",
-      skills: ["Excel", "Financial Modeling", "Accounting", "Presentation"],
-      difficulty: "Moderate",
-      desc: "Analyze financial statements, build models, and support investment or corporate finance decisions.",
-      prep: "Take finance & accounting courses, learn Excel modeling, get internships in finance; pursue CFA later."
-    },
-    {
-      major: "Business",
-      career: "Product Manager",
-      start_salary: 75000,
-      median_salary: 105000,
-      growth_pct: 11.0,
-      education: "Bachelor's",
-      skills: ["Roadmapping", "User Research", "Stakeholder Management", "Basic Analytics"],
-      difficulty: "Hard",
-      desc: "Lead product development, coordinate teams, and define roadmap based on user & market research.",
-      prep: "Work on product projects, understand UX, get internships, learn data-informed decision making."
+    themeToggle.addEventListener('click', () => {
+      body.classList.toggle('light');
+      localStorage.setItem('ss_theme', body.classList.contains('light') ? 'light' : 'dark');
+      showMessage('Theme switched — try the dark and light modes!');
+    });
+
+    function showMessage(text, ms = 3000){
+      msg.textContent = text;
+      msg.style.padding = '10px 12px';
+      msg.style.borderRadius = '10px';
+      msg.style.background = 'rgba(255,255,255,0.02)';
+      msg.style.marginTop = '8px';
+      setTimeout(()=> {
+        msg.textContent = '';
+        msg.style.padding = '';
+        msg.style.background = '';
+      }, ms);
     }
-  ];
 
-  /****************************************************************
-   * App logic: populate dropdowns, render charts, update side panel
-   ****************************************************************/
-  const majorSelect = document.getElementById('majorSelect');
-  const careerSelect = document.getElementById('careerSelect');
-  const careerTitle = document.getElementById('careerTitle');
-  const reqEdu = document.getElementById('reqEdu');
-  const careerDesc = document.getElementById('careerDesc');
-  const skillsEl = document.getElementById('skills');
-  const diffEl = document.getElementById('diff');
-  const prepTips = document.getElementById('prepTips');
-  const salarySummary = document.getElementById('salarySummary');
-  const growthSummary = document.getElementById('growthSummary');
-
-  let salaryChart = null;
-  let growthChart = null;
-
-  function uniqueMajors(data){
-    const s = new Set();
-    data.forEach(d => s.add(d.major));
-    return Array.from(s).sort();
-  }
-
-  function careersForMajor(data, major){
-    return data.filter(d => d.major === major).map(d => d.career);
-  }
-
-  function findEntry(major, career){
-    return DATA.find(d => d.major === major && d.career === career);
-  }
-
-  function populateMajors(){
-    const majors = uniqueMajors(DATA);
-    majorSelect.innerHTML = '';
-    majors.forEach(m => {
-      const o = document.createElement('option'); o.value = m; o.textContent = m;
-      majorSelect.appendChild(o);
-    });
-  }
-
-  function populateCareers(){
-    const major = majorSelect.value;
-    const careers = careersForMajor(DATA, major);
-    careerSelect.innerHTML = '';
-    careers.forEach(c => {
-      const o = document.createElement('option'); o.value = c; o.textContent = c;
-      careerSelect.appendChild(o);
-    });
-  }
-
-  function renderChartsFor(major, career){
-    const entry = findEntry(major, career);
-    if(!entry) return;
-
-    // Salary chart: bars for start vs median
-    const salaryCtx = document.getElementById('salaryChart').getContext('2d');
-    const salaryData = {
-      labels: ['Starting Salary', 'Median Salary'],
-      datasets: [{
-        label: entry.career,
-        data: [entry.start_salary, entry.median_salary],
-        backgroundColor: [ 'rgba(124,155,255,0.9)', 'rgba(124,155,255,0.65)' ],
-        borderRadius: 6
-      }]
-    };
-    if(salaryChart) salaryChart.destroy();
-    salaryChart = new Chart(salaryCtx, {
-      type: 'bar',
-      data: salaryData,
-      options: {
-        responsive:true,
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{beginAtZero:true, ticks:{callback: v => '$' + formatNumber(v)}}
-        },
-        layout:{padding:8}
-      }
+    // New mission: simulate progress increase
+    document.getElementById('newGame').addEventListener('click', () => {
+      let width = parseFloat(progressFill.style.width) || 0;
+      width = Math.min(100, width + 12.5);
+      progressFill.style.width = width + '%';
+      showMessage('New mission started — good luck!');
     });
 
-    // Growth chart: single point vs baseline - but to make a line, simulate historical + projection
-    const growthCtx = document.getElementById('growthChart').getContext('2d');
-    // create a 10-year timeline (current year + next 9 years)
-    const now = new Date().getFullYear();
-    const years = Array.from({length:10}, (_,i) => (now + i).toString());
-    // simulate growth: make baseline 100 then increase by growth_pct cumulatively
-    const base = 100;
-    const annualRate = entry.growth_pct / 100 / 10 * 10; // simple: evenly distribute projection over 10 years
-    // For simplicity, produce a smooth linear projection (real models would be more complex)
-    const growthSeries = years.map((y,i) => base * (1 + (entry.growth_pct/100) * (i/9)));
-
-    const growthData = {
-      labels: years,
-      datasets: [{
-        label: entry.career + ' (index)',
-        data: growthSeries,
-        borderColor: 'rgba(124,155,255,0.95)',
-        backgroundColor: 'rgba(124,155,255,0.18)',
-        fill: true,
-        tension: 0.25,
-        pointRadius: 3
-      }]
-    };
-    if(growthChart) growthChart.destroy();
-    growthChart = new Chart(growthCtx, {
-      type: 'line',
-      data: growthData,
-      options: {
-        responsive:true,
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{ticks:{callback: v => (Math.round((v/base -1)*100*100)/100) + '%' }}
-        }
-      }
+    // Other controls with friendly feedback
+    document.getElementById('helpBtn').addEventListener('click', () => {
+      showMessage('Quick tour: Missions → Learn → Apply → Repeat. 🎯');
     });
-
-    // Update textual summaries
-    salarySummary.textContent = `Start: $${formatNumber(entry.start_salary)} • Median: $${formatNumber(entry.median_salary)}`;
-    growthSummary.textContent = `Projected growth: ${entry.growth_pct}% (10 yrs)`;
-  }
-
-  function updateSidePanel(major, career){
-    const e = findEntry(major, career);
-    if(!e) return;
-    careerTitle.textContent = e.career;
-    reqEdu.textContent = 'Edu: ' + e.education;
-    careerDesc.textContent = e.desc;
-    diffEl.textContent = e.difficulty;
-    prepTips.textContent = e.prep;
-
-    // skills
-    skillsEl.innerHTML = '';
-    e.skills.forEach(s => {
-      const sp = document.createElement('div'); sp.className='skill'; sp.textContent = s;
-      skillsEl.appendChild(sp);
+    document.getElementById('startBtn').addEventListener('click', () => {
+      showMessage('Great — loading your mission...');
+      // placeholder: normally open mission view or route
     });
-  }
-
-  function formatNumber(n){
-    return n.toLocaleString();
-  }
-
-  // event handlers
-  majorSelect.addEventListener('change', () => {
-    populateCareers();
-    careerSelect.dispatchEvent(new Event('change'));
-  });
-
-  careerSelect.addEventListener('change', () => {
-    const major = majorSelect.value, career = careerSelect.value;
-    renderChartsFor(major, career);
-    updateSidePanel(major, career);
-  });
-
-  // init
-  function init(){
-    populateMajors();
-    populateCareers();
-    // set defaults
-    if(majorSelect.options.length>0) majorSelect.selectedIndex = 0;
-    if(careerSelect.options.length>0) careerSelect.selectedIndex = 0;
-    careerSelect.dispatchEvent(new Event('change'));
-  }
-
-  init();
-
-  /**********************
-   * Replace / extend DATA:
-   * - To add careers, push objects into DATA
-   * - Or load external JSON via fetch('data.json').then(...)
-   **********************/
-
+    document.getElementById('join').addEventListener('click', () => {
+      showMessage('Invite sent — check your notifications.');
+    });
+    document.getElementById('viewBoard').addEventListener('click', () => {
+      showMessage('Opening leaderboard (demo) ...');
+    });
+    document.getElementById('shareBtn').addEventListener('click', () => {
+      showMessage('Share link copied to clipboard (demo).');
+    });
   </script>
 </body>
 </html>
