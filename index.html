@@ -1,48 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Career & Economics Insights</title>
-
-<!-- Google Fonts -->
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-<!-- External CSS -->
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career & Economics Tools</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="container">
-    <h1>Career & Economics Insights</h1>
-    <p class="lead">Explore careers, salary projections, and economic trends interactively. See how choices can impact financial outcomes.</p>
 
-    <!-- Simulated Impact Metrics -->
-    <div class="metrics">
-        <div class="metric-card">
-            <h2 id="totalUsers">152</h2>
-            <p>Total Users</p>
-        </div>
-        <div class="metric-card">
-            <h2 id="careersProjected">324</h2>
-            <p>Careers Projected</p>
-        </div>
-        <div class="metric-card">
-            <h2 id="topCareer">Software Engineer</h2>
-            <p>Most Popular Career</p>
-        </div>
-    </div>
+    <!-- NAVIGATION BAR -->
+    <nav class="navbar">
+        <div class="logo">FutureLens</div>
 
-    <!-- Interactive Career Projection -->
-    <div class="card">
-        <input type="text" id="career" placeholder="Career (e.g., Software Engineer)">
-        <input type="number" id="years" placeholder="Years of experience">
-        <input type="text" id="location" placeholder="Location (e.g., New York)">
-        <button id="projectBtn">Show Projection</button>
-        <div class="result" id="output"></div>
-    </div>
-</div>
+        <ul class="nav-links">
+            <li class="dropdown">
+                <a href="#">Career Tools ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#career-projection">Career Projection</a></li>
+                    <li><a href="#salary-growth">Salary Growth</a></li>
+                </ul>
+            </li>
 
-<!-- External JS -->
-<script src="script.js"></script>
+            <li class="dropdown">
+                <a href="#">Economics Tools ▾</a>
+                <ul class="dropdown-menu">
+                    <li><a href="#inflation">Inflation Tracker</a></li>
+                    <li><a href="#cost-living">Cost of Living</a></li>
+                    <li><a href="#loan-calc">Loan Calculator</a></li>
+                </ul>
+            </li>
+
+            <li><a href="#about">About</a></li>
+        </ul>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <section class="hero">
+        <h1>Plan Your Future with Data</h1>
+        <p>Simple, clean tools to help you make smarter career and economic decisions.</p>
+    </section>
+
+    <section class="content">
+        <h2>Choose a Tool</h2>
+        <div class="card-grid">
+            <div class="card">
+                <h3>Career Projection</h3>
+                <p>Predict job growth and average salaries.</p>
+            </div>
+
+            <div class="card">
+                <h3>Cost of Living</h3>
+                <p>Compare cities based on affordability.</p>
+            </div>
+
+            <div class="card">
+                <h3>Loan Calculator</h3>
+                <p>Estimate monthly payments with ease.</p>
+            </div>
+        </div>
+    </section>
+
 </body>
 </html>
