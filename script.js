@@ -5,7 +5,7 @@ const TRIAL = {
   metrics: { users: 152, projections: 324, active: 18 },
 
   careers: {
-    "software engineer": { base: 90000, growth: 4500 }, 
+    "software engineer": { base: 90000, growth: 4500 },
     "designer": { base: 60000, growth: 3000 },
     "manager": { base: 80000, growth: 4000 },
     "teacher": { base: 45000, growth: 2000 },
@@ -21,25 +21,22 @@ const TRIAL = {
 };
 
 /* -------------------------
-   Utilities & DOM helpers
+   Helpers & query
    -------------------------*/
 const $ = (s) => document.querySelector(s);
 const $$ = (s) => Array.from(document.querySelectorAll(s));
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
 /* -------------------------
-   Metrics counters
+   Animated counters
    -------------------------*/
-function animateCount(id, to, ms = 900) {
-  const el = document.getElementById(id);
+function animateCount(el, to, ms = 900) {
   if (!el) return;
   const start = 0;
-  const duration = ms;
   const startTime = performance.now();
   function step(now) {
-    const t = clamp((now - startTime) / duration, 0, 1);
-    const val = Math.floor(start + (to - start) * t);
-    el.textContent = val;
+    const t = clamp((now - startTime) / ms, 0, 1);
+    el.textContent = Math.floor(start + (to - start) * t);
     if (t < 1) requestAnimationFrame(step);
   }
   requestAnimationFrame(step);
@@ -48,18 +45,18 @@ function animateCount(id, to, ms = 900) {
 /* -------------------------
    Sticky navbar shadow
    -------------------------*/
-const navbar = document.getElementById('navbar');
+const navbar = $('#navbar');
 window.addEventListener('scroll', () => {
-  if (window.scrollY > 8) navbar.classList.add('scrolled');
+  if (window.scrollY > 10) navbar.classList.add('scrolled');
   else navbar.classList.remove('scrolled');
 });
 
 /* -------------------------
-   Dark mode toggle
+   Theme toggle
    -------------------------*/
-const darkToggle = document.getElementById('darkToggle');
-const currentTheme = localStorage.getItem('futurelens_theme');
-if (currentTheme === 'dark') document.body.classList.add('dark');
+const darkToggle = $('#darkToggle');
+const saved = localStorage.getItem('futurelens_theme');
+if (saved === 'dark') document.body.classList.add('dark');
 darkToggle.addEventListener('click', () => {
   document.body.classList.toggle('dark');
   localStorage.setItem('futurelens_theme', document.body.classList.contains('dark') ? 'dark' : 'light');
@@ -72,8 +69,7 @@ document.addEventListener('click', (e) => {
   const a = e.target.closest('a[href^="#"]');
   if (a) {
     e.preventDefault();
-    const id = a.getAttribute('href');
-    const target = document.querySelector(id);
+    const target = document.querySelector(a.getAttribute('href'));
     if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 });
@@ -81,22 +77,22 @@ document.addEventListener('click', (e) => {
 /* -------------------------
    Reveal on scroll
    -------------------------*/
-function revealOnScroll() {
+function reveal() {
   $$('.reveal').forEach(el => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 60) el.classList.add('visible');
+    const r = el.getBoundingClientRect();
+    if (r.top < window.innerHeight - 80) el.classList.add('visible');
   });
 }
-window.addEventListener('load', revealOnScroll);
-window.addEventListener('scroll', revealOnScroll);
+window.addEventListener('load', reveal);
+window.addEventListener('scroll', reveal);
 
 /* -------------------------
-   Initialize metric counters
+   Init metrics
    -------------------------*/
 window.addEventListener('load', () => {
-  animateCount('m-users', TRIAL.metrics.users);
-  animateCount('m-projections', TRIAL.metrics.projections);
-  animateCount('m-active', TRIAL.metrics.active);
+  animateCount($('#m-users'), TRIAL.metrics.users);
+  animateCount($('#m-projections'), TRIAL.metrics.projections);
+  animateCount($('#m-active'), TRIAL.metrics.active);
 });
 
 /* -------------------------
@@ -104,8 +100,7 @@ window.addEventListener('load', () => {
    -------------------------*/
 function populateCities() {
   const keys = Object.keys(TRIAL.cities);
-  const a = $('#cityA');
-  const b = $('#cityB');
+  const a = $('#cityA'), b = $('#cityB');
   if (!a || !b) return;
   a.innerHTML = keys.map(k => `<option value="${k}">${k}</option>`).join('');
   b.innerHTML = keys.map(k => `<option value="${k}">${k}</option>`).join('');
@@ -116,79 +111,104 @@ populateCities();
    Chart helpers (Chart.js)
    -------------------------*/
 let careerChart, salaryChart, colChart, loanChart;
-
-function makeLineChart(ctx, labels, data, label, color) {
+function makeLineChart(ctx, labels, datasets, opts = {}) {
   return new Chart(ctx, {
     type: 'line',
-    data: { labels, datasets: [{ label, data, fill: false, tension: 0.3, borderWidth: 2 }]},
+    data: { labels, datasets },
     options: {
+      responsive: true,
+      maintainAspectRatio: false,
       plugins: { tooltip: { mode: 'index', intersect: false } },
-      hover: { mode: 'nearest', intersect: true },
-      scales: {
-        x: { display: true },
-        y: { display: true, beginAtZero: false }
-      }
+      scales: { x: { display: true }, y: { display: true, beginAtZero: false } },
+      interaction: { mode: 'nearest', intersect: true },
+      ...opts
+    }
+  });
+}
+function makeBarChart(ctx, labels, datasets, opts = {}) {
+  return new Chart(ctx, {
+    type: 'bar',
+    data: { labels, datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { tooltip: { mode: 'index', intersect: false } },
+      scales: { x: { stacked: false }, y: { beginAtZero: true } },
+      ...opts
     }
   });
 }
 
 /* -------------------------
-   Career projection logic
+   Career projection
    -------------------------*/
-function projectCareerUI() {
+function initCareer() {
   const careerInput = $('#careerInput');
   const yearsInput = $('#yearsInput');
   const locationInput = $('#locationInput');
   const btn = $('#careerBtn');
   const out = $('#careerResult');
-
-  // create empty chart placeholder
-  const ctxCareer = document.getElementById('careerChart').getContext('2d');
+  const ctx = document.getElementById('careerChart').getContext('2d');
 
   btn.addEventListener('click', () => {
     const careerRaw = careerInput.value.trim();
     const years = parseInt(yearsInput.value, 10);
     const location = locationInput.value.trim();
     if (!careerRaw || isNaN(years) || !location) {
-      out.innerHTML = 'Please fill all fields.';
+      out.innerHTML = 'Please complete all fields.';
       return;
     }
 
     const key = careerRaw.toLowerCase();
     const known = TRIAL.careers[key];
-    const careerData = known ? known : { base: 50000, growth: 1500 };
+    const data = known ? known : { base: 50000, growth: 1500 };
 
-    // build year-by-year projection (10 years)
-    const yearsArr = Array.from({length: 11}, (_, i) => i);
-    const salaryArr = yearsArr.map(i => careerData.base + careerData.growth * (i + years));
+    // projection for next 10 years (including current)
+    const labels = Array.from({length: 11}, (_, i) => `+${i}y`);
+    const values = labels.map((_, i) => data.base + data.growth * (i + years));
 
     out.innerHTML = `<strong>${careerRaw}</strong> — ${location}<br>
-      Starting estimate: $${(careerData.base + careerData.growth * years).toLocaleString()}<br>
-      Growth per year: $${careerData.growth.toLocaleString()}`;
+      Starting estimate: <strong>$${(data.base + data.growth * years).toLocaleString()}</strong><br>
+      Growth per year: <strong>$${data.growth.toLocaleString()}</strong>`;
 
-    // destroy previous chart
+    // draw chart (destroy old)
     if (careerChart) careerChart.destroy();
-    careerChart = makeLineChart(ctxCareer, yearsArr.map(y => `+${y}y`), salaryArr, 'Projected Salary', '#4a3aff');
+    careerChart = makeLineChart(ctx, labels, [{
+      label: 'Projected salary',
+      data: values,
+      borderColor: '#4a3aff',
+      backgroundColor: 'rgba(74,58,255,0.08)',
+      tension: 0.3,
+      pointRadius: 4,
+      borderWidth: 2
+    }]);
   });
 }
-projectCareerUI();
+initCareer();
 
 /* -------------------------
-   Salary growth example chart
+   Salary growth example
    -------------------------*/
 function initSalaryExample() {
   const ctx = document.getElementById('salaryChart').getContext('2d');
-  // Example dataset using trial careers applied over 10 years
-  const labels = Array.from({length:11}, (_,i) => `${i}y`);
+  const labels = Array.from({length: 11}, (_, i) => `${i}y`);
   const dataset = labels.map((_, i) => {
-    // average of careers base + growth*i
     const vals = Object.values(TRIAL.careers).map(c => c.base + c.growth * i);
-    const avg = Math.round(vals.reduce((s,a) => s+a,0) / vals.length);
-    return avg;
+    return Math.round(vals.reduce((s,a) => s + a, 0) / vals.length);
   });
+
   if (salaryChart) salaryChart.destroy();
-  salaryChart = makeLineChart(ctx, labels, dataset, 'Avg projected salary', '#22c55e');
+  salaryChart = makeLineChart(ctx, labels, [{
+    label: 'Average projected salary (trial careers)',
+    data: dataset,
+    borderColor: '#22c55e',
+    backgroundColor: 'rgba(34,197,94,0.08)',
+    tension: 0.3,
+    pointRadius: 3,
+    borderWidth: 2
+  }]);
 }
+initSalaryExample();
 
 /* -------------------------
    Cost of living comparator
@@ -201,29 +221,20 @@ function initCOL() {
   btn.addEventListener('click', () => {
     const a = $('#cityA').value;
     const b = $('#cityB').value;
-    if (!a || !b) { out.innerHTML = 'Choose two cities.'; return; }
-    const A = TRIAL.cities[a];
-    const B = TRIAL.cities[b];
+    if (!a || !b) { out.innerHTML = 'Select two cities.'; return; }
+    const A = TRIAL.cities[a], B = TRIAL.cities[b];
+    const cats = ['rent','groceries','transport','misc'];
+    const dataA = cats.map(c => A[c]);
+    const dataB = cats.map(c => B[c]);
 
-    const categories = ['rent','groceries','transport','misc'];
-    const dataA = categories.map(c => A[c]);
-    const dataB = categories.map(c => B[c]);
-
-    out.innerHTML = `<strong>${a}</strong> total ≔ $${(dataA.reduce((s,x)=>s+x,0)).toLocaleString()} / mo<br>
-                     <strong>${b}</strong> total ≔ $${(dataB.reduce((s,x)=>s+x,0)).toLocaleString()} / mo`;
+    out.innerHTML = `<strong>${a}</strong> ≈ $${dataA.reduce((s,x)=>s+x,0).toLocaleString()} / mo<br>
+                     <strong>${b}</strong> ≈ $${dataB.reduce((s,x)=>s+x,0).toLocaleString()} / mo`;
 
     if (colChart) colChart.destroy();
-    colChart = new Chart(ctx, {
-      type: 'bar',
-      data: {
-        labels: categories.map(c=>c.charAt(0).toUpperCase()+c.slice(1)),
-        datasets: [
-          { label: a, data: dataA, backgroundColor: 'rgba(74,58,255,0.8)' },
-          { label: b, data: dataB, backgroundColor: 'rgba(34,197,94,0.85)' }
-        ]
-      },
-      options: { plugins: { tooltip:{mode:'index'} }, responsive:true, scales:{y:{beginAtZero:true}}}
-    });
+    colChart = makeBarChart(ctx, cats.map(c => c[0].toUpperCase() + c.slice(1)), [
+      { label: a, data: dataA, backgroundColor: 'rgba(74,58,255,0.85)' },
+      { label: b, data: dataB, backgroundColor: 'rgba(34,197,94,0.85)' }
+    ]);
   });
 }
 initCOL();
@@ -240,51 +251,49 @@ function initLoan() {
     const P = parseFloat($('#loanAmount').value);
     const annualR = parseFloat($('#loanRate').value);
     const years = parseInt($('#loanYears').value, 10);
-    if (isNaN(P) || isNaN(annualR) || isNaN(years) || P<=0) {
-      out.innerHTML = 'Please enter valid loan amount, interest, and term.';
+    if (isNaN(P) || isNaN(annualR) || isNaN(years) || P <= 0 || years <= 0) {
+      out.innerHTML = 'Enter a valid loan amount, rate, and term.';
       return;
     }
+
     const r = annualR / 100 / 12;
     const n = years * 12;
     const monthly = (P * r) / (1 - Math.pow(1 + r, -n));
     const total = monthly * n;
-    const totalInterest = total - P;
+    const interest = total - P;
 
-    out.innerHTML = `Monthly payment: <strong>$${monthly.toFixed(2)}</strong><br>
-                     Total paid: $${total.toFixed(2)} (Interest: $${totalInterest.toFixed(2)})`;
+    out.innerHTML = `Monthly payment: <strong>$${monthly.toFixed(2)}</strong><br>Total paid: <strong>$${total.toFixed(2)}</strong> (Interest: $${interest.toFixed(2)})`;
 
-    // Chart: remaining principal by year
+    // remaining balance each year
     const remaining = [];
-    let balance = P;
-    for (let i=1;i<=n;i++){
-      const interest = balance * r;
-      const principal = monthly - interest;
-      balance = Math.max(0, balance - principal);
-      if (i % 12 === 0) remaining.push(Math.round(balance));
+    let bal = P;
+    for (let i = 1; i <= n; i++) {
+      const interestMonth = bal * r;
+      const principal = monthly - interestMonth;
+      bal = Math.max(0, bal - principal);
+      if (i % 12 === 0) remaining.push(Math.round(bal));
     }
-    const labels = remaining.map((_,i)=>`${i+1}y`);
+    const labels = remaining.map((_, i) => `${i+1}y`);
+
     if (loanChart) loanChart.destroy();
-    loanChart = new Chart(ctx, {
-      type:'line',
-      data:{labels, datasets:[{label:'Remaining principal', data:remaining, borderWidth:2}]},
-      options:{plugins:{tooltip:{mode:'index'}}, scales:{y:{beginAtZero:true}}}
-    });
+    loanChart = makeLineChart(ctx, labels, [{
+      label: 'Remaining principal',
+      data: remaining,
+      borderColor: '#fb923c',
+      backgroundColor: 'rgba(251,146,60,0.08)',
+      tension: 0.3,
+      pointRadius: 3,
+      borderWidth: 2
+    }]);
   });
 }
 initLoan();
 
 /* -------------------------
-   Small accessible dropdown keyboard fix
+   Small accessibility: keyboard open for dropdowns
    -------------------------*/
 $$('.dropbtn').forEach(btn => {
-  btn.addEventListener('keydown', e=>{
-    if(e.key === 'Enter' || e.key === ' ') btn.parentElement.classList.toggle('open');
+  btn.addEventListener('keydown', e => {
+    if (e.key === 'Enter' || e.key === ' ') btn.parentElement.classList.toggle('open');
   });
-});
-
-/* -------------------------
-   Initialize example charts on load
-   -------------------------*/
-window.addEventListener('load', () => {
-  initSalaryExample();
 });
