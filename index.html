@@ -1,139 +1,165 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FutureLens — Career & Economics Tools</title>
 
-  <!-- Fonts -->
+  <!-- Inter font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Styles -->
+  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css">
 
-  <!-- Chart.js (for interactive charts) -->
+  <!-- Chart.js -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+  <nav id="navbar" class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="brand">
+        <div class="logo">FutureLens</div>
+        <div class="brand-text">
+          <div class="title">FutureLens</div>
+          <div class="subtitle">career & economics tools</div>
+        </div>
+      </div>
 
-  <nav class="navbar" id="navbar">
-    <div class="nav-left">
-      <div class="logo">FutureLens</div>
-    </div>
+      <div class="nav-actions">
+        <button id="darkToggle" class="icon-btn" aria-label="Toggle theme">🌙</button>
 
-    <div class="nav-right">
-      <button id="darkToggle" class="icon-btn" title="Toggle dark mode">🌙</button>
-      <ul class="nav-links">
-        <li class="dropdown">
-          <button class="dropbtn">Career Tools ▾</button>
-          <ul class="dropdown-menu">
-            <li><a href="#career-section">Career Projection</a></li>
-            <li><a href="#salary-section">Salary Growth</a></li>
-          </ul>
-        </li>
-        <li class="dropdown">
-          <button class="dropbtn">Economics ▾</button>
-          <ul class="dropdown-menu">
-            <li><a href="#col-section">Cost of Living</a></li>
-            <li><a href="#loan-section">Loan Calculator</a></li>
-          </ul>
-        </li>
-        <li><a href="#about">About</a></li>
-      </ul>
+        <ul class="nav-links" role="menubar">
+          <li class="nav-item dropdown" role="none">
+            <button class="dropbtn" role="menuitem" aria-haspopup="true">Career Tools ▾</button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#career-section">Career Projection</a></li>
+              <li><a href="#salary-section">Salary Growth</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item dropdown" role="none">
+            <button class="dropbtn" role="menuitem" aria-haspopup="true">Economics ▾</button>
+            <ul class="dropdown-menu" role="menu">
+              <li><a href="#col-section">Cost of Living</a></li>
+              <li><a href="#loan-section">Loan Calculator</a></li>
+            </ul>
+          </li>
+
+          <li class="nav-item"><a href="#about">About</a></li>
+        </ul>
+      </div>
     </div>
   </nav>
 
   <header class="hero">
-    <h1>Plan your future with quick, data-driven tools</h1>
-    <p class="lead">Interactive calculators & visualizations — trial data included so you can test every feature.</p>
+    <div class="hero-inner">
+      <h1>Plan your future with clear, data-driven tools</h1>
+      <p class="lead">Lightweight, polished calculators and visualizations. All data is trial/sample — editable in the code.</p>
 
-    <div class="metrics" id="metrics">
-      <div class="metric-card">
-        <div class="metric-value" id="m-users">0</div>
-        <div class="metric-label">Total Users</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="m-projections">0</div>
-        <div class="metric-label">Careers Projected</div>
-      </div>
-      <div class="metric-card">
-        <div class="metric-value" id="m-active">0</div>
-        <div class="metric-label">Active Sessions</div>
+      <div class="metrics" aria-hidden="true">
+        <div class="metric">
+          <div class="metric-value" id="m-users">0</div>
+          <div class="metric-label">Total users</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="m-projections">0</div>
+          <div class="metric-label">Projections</div>
+        </div>
+        <div class="metric">
+          <div class="metric-value" id="m-active">0</div>
+          <div class="metric-label">Active</div>
+        </div>
       </div>
     </div>
   </header>
 
   <main class="main">
     <!-- Career Projection -->
-    <section id="career-section" class="card reveal">
-      <h2>Career Projection</h2>
-      <p class="muted">Type a career from the trial list (e.g., "Software Engineer", "Teacher", "Designer") or any title — unknown titles get default estimates.</p>
+    <section id="career-section" class="card section reveal">
+      <div class="section-grid">
+        <div>
+          <h2>Career Projection</h2>
+          <p class="muted">Try a trial title (e.g., "Software Engineer", "Teacher", "Designer"). Unknown titles use a default estimate.</p>
 
-      <div class="form-row">
-        <input id="careerInput" placeholder="Career (ex: Software Engineer)" />
-        <input id="yearsInput" type="number" placeholder="Years experience" min="0" />
-        <input id="locationInput" placeholder="Location (ex: New York)" />
-        <button id="careerBtn">Project</button>
-      </div>
+          <div class="form-row">
+            <input id="careerInput" placeholder="Career (ex: Software Engineer)" />
+            <input id="yearsInput" type="number" placeholder="Years experience" min="0" />
+            <input id="locationInput" placeholder="Location (ex: New York)" />
+            <button id="careerBtn" class="primary">Project</button>
+          </div>
 
-      <div class="result" id="careerResult"></div>
+          <div id="careerResult" class="result"></div>
+        </div>
 
-      <div class="chart-wrap">
-        <canvas id="careerChart" height="160"></canvas>
+        <div class="chart-container">
+          <canvas id="careerChart" height="220"></canvas>
+        </div>
       </div>
     </section>
 
-    <!-- Salary growth (example chart) -->
-    <section id="salary-section" class="card reveal">
-      <h2>Salary Growth Example</h2>
-      <p class="muted">Hover over points to see year-by-year projected salary</p>
-      <div class="chart-wrap">
-        <canvas id="salaryChart" height="160"></canvas>
+    <!-- Salary Growth -->
+    <section id="salary-section" class="card section reveal">
+      <h2>Salary Growth (Example)</h2>
+      <p class="muted">Average projected salary across trial careers. Hover points to view yearly values.</p>
+      <div class="chart-container">
+        <canvas id="salaryChart" height="220"></canvas>
       </div>
     </section>
 
     <!-- Cost of Living -->
-    <section id="col-section" class="card reveal">
-      <h2>Cost of Living Comparator (trial data)</h2>
-      <p class="muted">Choose two cities from the trial list to compare estimated monthly costs.</p>
+    <section id="col-section" class="card section reveal">
+      <div class="section-grid">
+        <div>
+          <h2>Cost of Living Comparison</h2>
+          <p class="muted">Compare two trial cities to see monthly cost breakdowns.</p>
 
-      <div class="form-row">
-        <select id="cityA"></select>
-        <select id="cityB"></select>
-        <button id="colBtn">Compare</button>
-      </div>
+          <div class="form-row">
+            <select id="cityA"></select>
+            <select id="cityB"></select>
+            <button id="colBtn" class="primary">Compare</button>
+          </div>
 
-      <div class="result" id="colResult"></div>
+          <div id="colResult" class="result"></div>
+        </div>
 
-      <div class="chart-wrap">
-        <canvas id="colChart" height="160"></canvas>
+        <div class="chart-container">
+          <canvas id="colChart" height="220"></canvas>
+        </div>
       </div>
     </section>
 
     <!-- Loan Calculator -->
-    <section id="loan-section" class="card reveal">
-      <h2>Loan Calculator</h2>
-      <p class="muted">Enter loan amount, annual interest (%), and term (years).</p>
+    <section id="loan-section" class="card section reveal">
+      <div class="section-grid">
+        <div>
+          <h2>Loan Calculator</h2>
+          <p class="muted">Estimates monthly payment, total interest, and shows remaining balance over years.</p>
 
-      <div class="form-row">
-        <input id="loanAmount" type="number" placeholder="Loan amount (USD)" />
-        <input id="loanRate" type="number" placeholder="Interest rate (% APR)" step="0.01" />
-        <input id="loanYears" type="number" placeholder="Term (years)" />
-        <button id="loanBtn">Calculate</button>
-      </div>
+          <div class="form-row">
+            <input id="loanAmount" type="number" placeholder="Loan amount (USD)" />
+            <input id="loanRate" type="number" placeholder="Annual interest (%)" step="0.01" />
+            <input id="loanYears" type="number" placeholder="Term (years)" />
+            <button id="loanBtn" class="primary">Calculate</button>
+          </div>
 
-      <div class="result" id="loanResult"></div>
+          <div id="loanResult" class="result"></div>
+        </div>
 
-      <div class="chart-wrap">
-        <canvas id="loanChart" height="160"></canvas>
+        <div class="chart-container">
+          <canvas id="loanChart" height="220"></canvas>
+        </div>
       </div>
     </section>
 
-    <section id="about" class="card reveal">
+    <section id="about" class="card section reveal">
       <h2>About</h2>
-      <p class="muted">This site is a student demo. All user-facing data is trial/sample data stored in the browser. No personal data is collected or sent anywhere.</p>
+      <p class="muted">This is a student demo. All shown data is trial/sample and stored client-side. No personal data is collected.</p>
     </section>
   </main>
+
+  <footer class="footer">
+    <div>Made with ♥ • Trial data only • FutureLens</div>
+  </footer>
 
   <script src="script.js"></script>
 </body>
